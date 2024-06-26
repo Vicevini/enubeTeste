@@ -51,45 +51,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func GetData(w http.ResponseWriter, r *http.Request) {
-	// Retorno de dados de exemplo
-	data := map[string]string{
-		"data": "Este é um dado protegido",
-	}
-	json.NewEncoder(w).Encode(data)
-}
-
 // Funções para ler colunas do Excel
-
-func GetNames(w http.ResponseWriter, r *http.Request) {
-	names, err := readColumn("Nome")
-	if err != nil {
-		log.Println("Erro ao ler a coluna Nome:", err)
-		http.Error(w, "Erro ao ler a coluna Nome", http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(names)
-}
-
-func GetAges(w http.ResponseWriter, r *http.Request) {
-	ages, err := readColumn("Idade")
-	if err != nil {
-		log.Println("Erro ao ler a coluna Idade:", err)
-		http.Error(w, "Erro ao ler a coluna Idade", http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(ages)
-}
-
-func GetSchools(w http.ResponseWriter, r *http.Request) {
-	schools, err := readColumn("Escola")
-	if err != nil {
-		log.Println("Erro ao ler a coluna Escola:", err)
-		http.Error(w, "Erro ao ler a coluna Escola", http.StatusInternalServerError)
-		return
-	}
-	json.NewEncoder(w).Encode(schools)
-}
 
 func GetPartnerId(w http.ResponseWriter, r *http.Request) {
 	partnerId, err := readTrueColumn("PartnerId")
@@ -99,4 +61,34 @@ func GetPartnerId(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewEncoder(w).Encode(partnerId)
+}
+
+func GetPartnerName(w http.ResponseWriter, r *http.Request) {
+	partnerName, err := readTrueColumn("PartnerName")
+	if err != nil {
+		log.Println("Erro ao ler a coluna PartnerName:", err)
+		http.Error(w, "Erro ao ler a coluna PartnerName", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(partnerName)
+}
+
+func GetCustomerId(w http.ResponseWriter, r *http.Request) {
+	CustomerId, err := readTrueColumn("CustomerId")
+	if err != nil {
+		log.Println("Erro ao ler a coluna CustomerId:", err)
+		http.Error(w, "Erro ao ler a coluna CustomerId", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(CustomerId)
+}
+
+func GetCustomerName(w http.ResponseWriter, r *http.Request) {
+	customerId, err := readTrueColumn("CustomerName")
+	if err != nil {
+		log.Println("Erro ao ler a coluna CustomerName:", err)
+		http.Error(w, "Erro ao ler a coluna CustomerName", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(customerId)
 }
