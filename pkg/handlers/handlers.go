@@ -29,13 +29,22 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Credenciais recebidas:", user.Username, user.Password)
 
-	// Simulação de autenticação
+	// Autenticação
 	if user.Username == "user" && user.Password == "password" {
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-			"username": user.Username,
-			"exp":      time.Now().Add(time.Hour * 72).Unix(),
-		})
+		// Derruba o token anterior
+		if tokenString := getTokenFromCache(user.Username); tokenString != "" {
+			RevokeToken(tokenString)
+		}
 
+		// Define as claims do novo token
+		expirationTime := time.Now().Add(1 * time.Hour) // Expira em 1 hora
+		claims := jwt.MapClaims{
+			"username": user.Username,
+			"exp":      expirationTime.Unix(),
+		}
+
+		// Cria o novo token
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		tokenString, err := token.SignedString(mySigningKey)
 		if err != nil {
 			log.Println("Erro ao assinar o token:", err)
@@ -44,11 +53,28 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Println("Token gerado com sucesso:", tokenString)
+
+		// Guarda o novo token em cache
+		saveTokenInCache(user.Username, tokenString)
+
 		json.NewEncoder(w).Encode(JwtToken{Token: tokenString})
 	} else {
 		log.Println("Usuário ou senha inválidos")
 		http.Error(w, "Usuário ou senha inválidos", http.StatusUnauthorized)
 	}
+}
+
+// Funções auxiliares para gerenciar o cache de tokens
+func saveTokenInCache(username, tokenString string) {
+	cacheMutex.Lock()
+	defer cacheMutex.Unlock()
+	tokenCache[username] = tokenString
+}
+
+func getTokenFromCache(username string) string {
+	cacheMutex.Lock()
+	defer cacheMutex.Unlock()
+	return tokenCache[username]
 }
 
 // Funções para ler colunas do Excel
