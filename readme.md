@@ -1,22 +1,46 @@
-Criado a API
+# Projeto de API para Teste Técnico
 
-Rota de login: ` POST /login`
+## Visão Geral
 
-funciona, gera token com validade de uma hora, até o momento usuário e senhas são fake
+Este projeto consiste na criação de uma API em Golang para um teste técnico. A API permite autenticação e consulta de dados de parceiros e clientes.
 
-Rota de consulta: GET
+## Tecnologias e Ferramentas
 
-```
-GET
+- **BackEnd:** Golang 1.22.4
 
-/partnerId
+## Como Executar
 
-/partnerName
+1. Certifique-se de ter o Golang 1.22.4 instalado em seu ambiente.
+2. Clone o repositório do projeto.
+3. Navegue até o diretório do projeto e execute o comando para baixar as dependências:
 
-/customerId
+   ```bash
+   go mod tidy
+   ```
 
-/customerName
+4. Inicie o servidor com o comando:
 
-```
+   ```bash
+   go run main.go
+   ```
 
-Fazem a validação do token e devolvem os dados, a consulta está levando em média 25 segundos para retornar dados, tenho em mente criar paginação para poder otimizar e facilitar leitura.
+5. Utilize ferramentas como Postman ou Insomnia para fazer as requisições. As rotas disponíveis estão listadas abaixo.
+
+## Rotas
+
+### Autenticação
+
+- **Login:** `POST /login`
+  - **Content-Type:** application/json
+  - **Descrição:** Gera um token do tipo _Bearer_ com validade de uma hora.
+
+### Rotas de Consulta
+
+As seguintes rotas fazem a validação do token e retornam os dados solicitados:
+
+- `GET /partnerId`
+- `GET /partnerName`
+- `GET /customerId`
+- `GET /customerName`
+
+> **Nota:** As consultas estão levando em média 25 segundos para retornar dados. Há planos para implementar paginação para otimizar e facilitar a leitura dos dados.
