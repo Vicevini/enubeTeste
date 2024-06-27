@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este projeto consiste na criação de uma API em Golang para um teste técnico. A API permite autenticação e consulta de dados de parceiros e clientes.
+Este projeto consiste na criação de uma API em Golang para um teste técnico. A API permite autenticação e consulta de dados de parceiros, clientes e informações de faturamento.
 
 ## Tecnologias e Ferramentas
 
@@ -42,5 +42,19 @@ As seguintes rotas fazem a validação do token e retornam os dados solicitados:
 - `GET /partnerName`
 - `GET /customerId`
 - `GET /customerName`
+- `GET /invoiceNumber`
+- `GET /productId`
+- `GET /skuId`
+- `GET /skuName`
+- `GET /subscriptionId`
+- `GET /chargeStartDate`
+- `GET /chargeEndDate`
+- `GET /billingPreTaxTotal`
+- `GET /pricingPreTaxTotal`
+- `GET /usageDate`
+- `GET /consumedService`
+- `GET /resourceGroup`
+- `GET /resourceURI`
 
 > **Nota:** As consultas estão levando em média 25 segundos para retornar dados. Há planos para implementar paginação para otimizar e facilitar a leitura dos dados.
+> A paginação foi inserida porém a resposta ainda leva tempo.

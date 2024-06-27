@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -29,22 +30,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Credenciais recebidas:", user.Username, user.Password)
 
-	// Autenticação
 	if user.Username == "user" && user.Password == "password" {
-		// Derruba o token anterior
-		if tokenString := getTokenFromCache(user.Username); tokenString != "" {
-			RevokeToken(tokenString)
-		}
-
-		// Define as claims do novo token
-		expirationTime := time.Now().Add(1 * time.Hour) // Expira em 1 hora
-		claims := jwt.MapClaims{
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 			"username": user.Username,
-			"exp":      expirationTime.Unix(),
-		}
+			"exp":      time.Now().Add(time.Hour).Unix(), // Token válido por 1 hora
+		})
 
-		// Cria o novo token
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 		tokenString, err := token.SignedString(mySigningKey)
 		if err != nil {
 			log.Println("Erro ao assinar o token:", err)
@@ -53,10 +44,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		log.Println("Token gerado com sucesso:", tokenString)
-
-		// Guarda o novo token em cache
-		saveTokenInCache(user.Username, tokenString)
-
 		json.NewEncoder(w).Encode(JwtToken{Token: tokenString})
 	} else {
 		log.Println("Usuário ou senha inválidos")
@@ -64,23 +51,28 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Funções auxiliares para gerenciar o cache de tokens
-func saveTokenInCache(username, tokenString string) {
-	cacheMutex.Lock()
-	defer cacheMutex.Unlock()
-	tokenCache[username] = tokenString
-}
+func getPageParams(r *http.Request) (int, int) {
+	pageSize := 50
+	pageNumber := 1
 
-func getTokenFromCache(username string) string {
-	cacheMutex.Lock()
-	defer cacheMutex.Unlock()
-	return tokenCache[username]
-}
+	query := r.URL.Query()
+	if size := query.Get("tamanhoPagina"); size != "" {
+		if s, err := strconv.Atoi(size); err == nil {
+			pageSize = s
+		}
+	}
+	if number := query.Get("numeroPagina"); number != "" {
+		if n, err := strconv.Atoi(number); err == nil {
+			pageNumber = n
+		}
+	}
 
-// Funções para ler colunas do Excel
+	return pageSize, pageNumber
+}
 
 func GetPartnerId(w http.ResponseWriter, r *http.Request) {
-	partnerId, err := readTrueColumn("PartnerId")
+	pageSize, pageNumber := getPageParams(r)
+	partnerId, err := readTrueColumn("PartnerId", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna PartnerId:", err)
 		http.Error(w, "Erro ao ler a coluna PartnerId", http.StatusInternalServerError)
@@ -90,7 +82,8 @@ func GetPartnerId(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPartnerName(w http.ResponseWriter, r *http.Request) {
-	partnerName, err := readTrueColumn("PartnerName")
+	pageSize, pageNumber := getPageParams(r)
+	partnerName, err := readTrueColumn("PartnerName", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna PartnerName:", err)
 		http.Error(w, "Erro ao ler a coluna PartnerName", http.StatusInternalServerError)
@@ -100,21 +93,155 @@ func GetPartnerName(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCustomerId(w http.ResponseWriter, r *http.Request) {
-	CustomerId, err := readTrueColumn("CustomerId")
+	pageSize, pageNumber := getPageParams(r)
+	customerId, err := readTrueColumn("CustomerId", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna CustomerId:", err)
 		http.Error(w, "Erro ao ler a coluna CustomerId", http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(CustomerId)
+	json.NewEncoder(w).Encode(customerId)
 }
 
 func GetCustomerName(w http.ResponseWriter, r *http.Request) {
-	customerId, err := readTrueColumn("CustomerName")
+	pageSize, pageNumber := getPageParams(r)
+	customerName, err := readTrueColumn("CustomerName", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna CustomerName:", err)
 		http.Error(w, "Erro ao ler a coluna CustomerName", http.StatusInternalServerError)
 		return
 	}
-	json.NewEncoder(w).Encode(customerId)
+	json.NewEncoder(w).Encode(customerName)
+}
+
+func GetInvoiceNumber(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	invoiceNumber, err := readTrueColumn("InvoiceNumber", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna InvoiceNumber:", err)
+		http.Error(w, "Erro ao ler a coluna InvoiceNumber", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(invoiceNumber)
+}
+
+func GetProductId(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	productId, err := readTrueColumn("productId", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna productId:", err)
+		http.Error(w, "Erro ao ler a coluna productId", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(productId)
+}
+func GetSkuId(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	skuId, err := readTrueColumn("skuId", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna skuId:", err)
+		http.Error(w, "Erro ao ler a coluna skuId", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(skuId)
+}
+func GetSkuName(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	skuName, err := readTrueColumn("skuName", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna skuName:", err)
+		http.Error(w, "Erro ao ler a coluna skuName", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(skuName)
+}
+func GetSubscriptionId(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	subscriptionId, err := readTrueColumn("subscriptionId", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna subscriptionId:", err)
+		http.Error(w, "Erro ao ler a coluna subscriptionId", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(subscriptionId)
+}
+func GetChargeStartDate(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	chargeStartDate, err := readTrueColumn("chargeStartDate", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna chargeStartDate:", err)
+		http.Error(w, "Erro ao ler a coluna chargeStartDate", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(chargeStartDate)
+}
+func GetChargeEndDate(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	chargeEndDate, err := readTrueColumn("chargeEndDate", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna chargeEndDate:", err)
+		http.Error(w, "Erro ao ler a coluna chargeEndDate", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(chargeEndDate)
+}
+func GetBillingPreTaxTotal(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	billingPreTaxTotal, err := readTrueColumn("billingPreTaxTotal", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna billingPreTaxTotal:", err)
+		http.Error(w, "Erro ao ler a coluna billingPreTaxTotal", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(billingPreTaxTotal)
+}
+func GetPricingPreTaxTotal(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	pricingPreTaxTotal, err := readTrueColumn("pricingPreTaxTotal", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna pricingPreTaxTotal:", err)
+		http.Error(w, "Erro ao ler a coluna pricingPreTaxTotal", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(pricingPreTaxTotal)
+}
+func GetUsageDate(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	usageDate, err := readTrueColumn("usageDate", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna usageDate:", err)
+		http.Error(w, "Erro ao ler a coluna usageDate", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(usageDate)
+}
+func GetConsumedService(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	consumedService, err := readTrueColumn("consumedService", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna consumedService:", err)
+		http.Error(w, "Erro ao ler a coluna consumedService", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(consumedService)
+}
+func GetResourceGroup(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	resourceGroup, err := readTrueColumn("resourceGroup", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna resourceGroup:", err)
+		http.Error(w, "Erro ao ler a coluna resourceGroup", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(resourceGroup)
+}
+func GetResourceURI(w http.ResponseWriter, r *http.Request) {
+	pageSize, pageNumber := getPageParams(r)
+	resourceURI, err := readTrueColumn("resourceURI", pageSize, pageNumber)
+	if err != nil {
+		log.Println("Erro ao ler a coluna resourceURI:", err)
+		http.Error(w, "Erro ao ler a coluna resourceURI", http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(w).Encode(resourceURI)
 }
