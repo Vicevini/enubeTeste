@@ -127,7 +127,7 @@ func GetInvoiceNumber(w http.ResponseWriter, r *http.Request) {
 
 func GetProductId(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	productId, err := readTrueColumn("productId", pageSize, pageNumber)
+	productId, err := readTrueColumn("ProductId", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna productId:", err)
 		http.Error(w, "Erro ao ler a coluna productId", http.StatusInternalServerError)
@@ -137,7 +137,7 @@ func GetProductId(w http.ResponseWriter, r *http.Request) {
 }
 func GetSkuId(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	skuId, err := readTrueColumn("skuId", pageSize, pageNumber)
+	skuId, err := readTrueColumn("SkuId", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna skuId:", err)
 		http.Error(w, "Erro ao ler a coluna skuId", http.StatusInternalServerError)
@@ -147,7 +147,7 @@ func GetSkuId(w http.ResponseWriter, r *http.Request) {
 }
 func GetSkuName(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	skuName, err := readTrueColumn("skuName", pageSize, pageNumber)
+	skuName, err := readTrueColumn("SkuName", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna skuName:", err)
 		http.Error(w, "Erro ao ler a coluna skuName", http.StatusInternalServerError)
@@ -157,7 +157,7 @@ func GetSkuName(w http.ResponseWriter, r *http.Request) {
 }
 func GetSubscriptionId(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	subscriptionId, err := readTrueColumn("subscriptionId", pageSize, pageNumber)
+	subscriptionId, err := readTrueColumn("SubscriptionId", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna subscriptionId:", err)
 		http.Error(w, "Erro ao ler a coluna subscriptionId", http.StatusInternalServerError)
@@ -167,7 +167,7 @@ func GetSubscriptionId(w http.ResponseWriter, r *http.Request) {
 }
 func GetChargeStartDate(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	chargeStartDate, err := readTrueColumn("chargeStartDate", pageSize, pageNumber)
+	chargeStartDate, err := readTrueColumn("ChargeStartDate", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna chargeStartDate:", err)
 		http.Error(w, "Erro ao ler a coluna chargeStartDate", http.StatusInternalServerError)
@@ -177,7 +177,7 @@ func GetChargeStartDate(w http.ResponseWriter, r *http.Request) {
 }
 func GetChargeEndDate(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	chargeEndDate, err := readTrueColumn("chargeEndDate", pageSize, pageNumber)
+	chargeEndDate, err := readTrueColumn("ChargeEndDate", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna chargeEndDate:", err)
 		http.Error(w, "Erro ao ler a coluna chargeEndDate", http.StatusInternalServerError)
@@ -187,7 +187,7 @@ func GetChargeEndDate(w http.ResponseWriter, r *http.Request) {
 }
 func GetBillingPreTaxTotal(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	billingPreTaxTotal, err := readTrueColumn("billingPreTaxTotal", pageSize, pageNumber)
+	billingPreTaxTotal, err := readTrueColumn("BillingPreTaxTotal", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna billingPreTaxTotal:", err)
 		http.Error(w, "Erro ao ler a coluna billingPreTaxTotal", http.StatusInternalServerError)
@@ -197,7 +197,7 @@ func GetBillingPreTaxTotal(w http.ResponseWriter, r *http.Request) {
 }
 func GetPricingPreTaxTotal(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	pricingPreTaxTotal, err := readTrueColumn("pricingPreTaxTotal", pageSize, pageNumber)
+	pricingPreTaxTotal, err := readTrueColumn("PricingPreTaxTotal", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna pricingPreTaxTotal:", err)
 		http.Error(w, "Erro ao ler a coluna pricingPreTaxTotal", http.StatusInternalServerError)
@@ -207,7 +207,7 @@ func GetPricingPreTaxTotal(w http.ResponseWriter, r *http.Request) {
 }
 func GetUsageDate(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	usageDate, err := readTrueColumn("usageDate", pageSize, pageNumber)
+	usageDate, err := readTrueColumn("UsageDate", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna usageDate:", err)
 		http.Error(w, "Erro ao ler a coluna usageDate", http.StatusInternalServerError)
@@ -217,7 +217,7 @@ func GetUsageDate(w http.ResponseWriter, r *http.Request) {
 }
 func GetConsumedService(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	consumedService, err := readTrueColumn("consumedService", pageSize, pageNumber)
+	consumedService, err := readTrueColumn("ConsumedService", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna consumedService:", err)
 		http.Error(w, "Erro ao ler a coluna consumedService", http.StatusInternalServerError)
@@ -227,7 +227,7 @@ func GetConsumedService(w http.ResponseWriter, r *http.Request) {
 }
 func GetResourceGroup(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	resourceGroup, err := readTrueColumn("resourceGroup", pageSize, pageNumber)
+	resourceGroup, err := readTrueColumn("ResourceGroup", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna resourceGroup:", err)
 		http.Error(w, "Erro ao ler a coluna resourceGroup", http.StatusInternalServerError)
@@ -237,7 +237,7 @@ func GetResourceGroup(w http.ResponseWriter, r *http.Request) {
 }
 func GetResourceURI(w http.ResponseWriter, r *http.Request) {
 	pageSize, pageNumber := getPageParams(r)
-	resourceURI, err := readTrueColumn("resourceURI", pageSize, pageNumber)
+	resourceURI, err := readTrueColumn("ResourceURI", pageSize, pageNumber)
 	if err != nil {
 		log.Println("Erro ao ler a coluna resourceURI:", err)
 		http.Error(w, "Erro ao ler a coluna resourceURI", http.StatusInternalServerError)

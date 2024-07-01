@@ -56,5 +56,26 @@ As seguintes rotas fazem a validação do token e retornam os dados solicitados:
 - `GET /resourceGroup`
 - `GET /resourceURI`
 
+### Status Codes
+
+- 200 OK
+- 401 Unauthorized
+
 > **Nota:** As consultas estão levando em média 25 segundos para retornar dados. Há planos para implementar paginação para otimizar e facilitar a leitura dos dados.
 > A paginação foi inserida porém a resposta ainda leva tempo.
+
+### Como usar
+
+- Execute a requisição de Login informando as credenciais
+
+  ```curl --location 'http://localhost:8000/login' \
+   --header 'Content-Type: application/json' \
+   --data '{"username":"user", "password":"password"}'``
+
+  ```
+
+- Salve o token e o utilize como header das demais chamadas:
+
+```curl --location 'http://localhost:8000/partnerId?tamanhoPagina=45&numeroPagina=1' \
+--header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTk4NTYwNDYsInVzZXJuYW1lIjoidXNlciJ9.77RdiT--xOjj-Y963fpxRxIxvg4I6zfl8gJYC7LgAc8'
+```
