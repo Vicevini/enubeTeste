@@ -2,15 +2,30 @@ package handlers
 
 import (
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/xuri/excelize/v2"
 )
 
-const truefilePath = "C:\\Users\\vicev\\Documents\\projects\\enubeTeste\\pkg\\data\\Reconfile fornecedores.xlsx"
+const truefilePath = "..\\pkg\\data\\Reconfile fornecedores.xlsx"
 const trueSheetName = "Planilha1"
 
+func getAbsolutePath(relativePath string) (string, error) {
+	basepath, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(basepath, relativePath), nil
+}
+
 func readTrueColumn(column string, pageSize, pageNumber int) ([]string, error) {
-	f, err := excelize.OpenFile(truefilePath)
+	absPath, err := getAbsolutePath(truefilePath)
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := excelize.OpenFile(absPath)
 	if err != nil {
 		return nil, err
 	}
