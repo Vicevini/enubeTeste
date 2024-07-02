@@ -66,6 +66,8 @@ As seguintes rotas fazem a validação do token e retornam os dados solicitados:
 
 ### Como usar
 
+Collection: https://drive.google.com/file/d/16w7eaLF-kTDJkddwkRI6pwWR1GMA9Jmg/view?usp=sharing
+
 - Execute a requisição de Login informando as credenciais
 
   ```curl --location 'http://localhost:8000/login' \
